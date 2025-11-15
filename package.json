@@ -1,0 +1,11 @@
+{
+  "name": "ocr-api-vercel",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "tesseract.js": "^5.1.0",
+    "axios": "^1.6.0"
+  }
+}
