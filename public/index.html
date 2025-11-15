@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR API Status</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #1e3c72, #2a5298); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Roboto', sans-serif; }
+    .glass { background: rgba(255,255,255,0.15); border-radius: 30px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.25); padding: 50px; text-align: center; color: white; width: 450px; box-shadow: 0 8px 32px rgba(31,38,135,0.37); transition: 0.4s; }
+    .glass:hover { transform: scale(1.05); }
+    .dot { width: 25px; height: 25px; border-radius: 50%; display: inline-block; margin-left: 15px; }
+    .online { background: #4caf50; animation: glow 1.5s infinite; }
+    .offline { background: #f44336; }
+    .loading { background: #ffeb3b; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    @keyframes glow { 0%,100% { box-shadow:0 0 10px #4caf50; } 50% { box-shadow:0 <|eos|>
