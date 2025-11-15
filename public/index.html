@@ -3,16 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OCR API Status</title>
+  <title>OCR API Status - Vercel</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
-    body { background: linear-gradient(135deg, #1e3c72, #2a5298); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Roboto', sans-serif; }
-    .glass { background: rgba(255,255,255,0.15); border-radius: 30px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.25); padding: 50px; text-align: center; color: white; width: 450px; box-shadow: 0 8px 32px rgba(31,38,135,0.37); transition: 0.4s; }
-    .glass:hover { transform: scale(1.05); }
-    .dot { width: 25px; height: 25px; border-radius: 50%; display: inline-block; margin-left: 15px; }
-    .online { background: #4caf50; animation: glow 1.5s infinite; }
-    .offline { background: #f44336; }
-    .loading { background: #ffeb3b; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
-    @keyframes glow { 0%,100% { box-shadow:0 0 10px #4caf50; } 50% { box-shadow:0 <|eos|>
+    body {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      overflow: hidden;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 30px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 50px;
+      text-align: center;
+      color: white;
+      width: 450px;
+      max-width: 90%;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      transition: all 0.4s ease;
+    }
+    .glass:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 16px 48px rgba(31, 38, 135, 0.5);
+    }
+    .dot {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    }
+    .online {
+      background: #4caf50;
+      animation: glow-green 1.5s infinite;
+    }
+    .offline {
+      background: #f44336;
+      animation: glow-red 1.5s infinite;
+    }
+    .loading {
+      background: #ffeb3b;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+    @keyframes glow-green {
+      0%, 100% { box-shadow: 0 0 15px #4caf50; }
+      50% { box-shadow: 0 0 25px #4caf50; }
+    }
+    @keyframes glow-red {
+      0%, 100% { box-shadow: 0 0 15px #f44336; }
+      50% { box-shadow: 0 0 25px #f44336; }
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    p {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="glass animate__animated animate__fadeInUp">
+    <h1 class="text-4xl font-bold mb-6">OCR API Status</h1>
+    <p class="text-xl mb-4">Verificando conexão com a API...</p>
+    <div class="text-lg">
+      <span>Status:</span>
+      <div id="indicator" class="dot loading"></div>
+    </div>
+    <p id="message" class="mt-4 text-sm opacity-80">Aguardando resposta...</p>
+  </div>
+
+  <script>
+    const API_URL = '/api/status'; // Vercel usa /api
+
+    async function checkStatus() {
+      const indicator = document.getElementById('indicator');
+      const message = document.getElementById('message');
+      let retries = 3;
+
+      while (retries > 0) {
+        try {
+          const res = await fetch(API_URL);
+          const data = await res.json();
+
+          if (res.ok && data.status === 'active') {
+            indicator.className = 'dot online';
+            message.textContent = `API ATIVA! Versão: ${data.version}`;
+            document.querySelector('p').textContent = 'Tudo funcionando!';
+            return;
+          }
+        } catch (err) {
+          retries--;
+          if (retries === 0) {
+            indicator.className = 'dot offline';
+            message.textContent = 'Erro: API não responde';
+            document.querySelector('p').textContent = 'Verifique o backend';
+          } else {
+            message.textContent = `Tentando novamente... (${retries})`;
+          }
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    }
+
+    checkStatus();
+  </script>
+</body>
+</html>
